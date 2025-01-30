@@ -8,8 +8,8 @@ import java.util.Scanner;
  * <p>Created by ChatGPT</p>
  */
 public class Client {
-  static final String SERVER_ADDRESS = "localhost";
-  static final int PORT = 12345;
+  private static final String SERVER_ADDRESS = "localhost";
+  private static final int PORT = 12345;
 
   /**
    * Main method to run the client.
