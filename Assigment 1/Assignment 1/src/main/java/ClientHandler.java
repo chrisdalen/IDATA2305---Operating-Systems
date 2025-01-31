@@ -5,15 +5,27 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * A class that handles client requests in a multithreaded server.
+ */
 public class ClientHandler implements Runnable {
   private final Socket clientSocket;
   private final AtomicInteger requestCount;
 
+  /**
+   * Constructor to initialize the client socket and request count.
+   *
+   * @param clientSocket The client socket
+   * @param requestCount The request count
+   */
   public ClientHandler(Socket clientSocket, AtomicInteger requestCount) {
     this.clientSocket = clientSocket;
     this.requestCount = requestCount;
   }
 
+  /**
+   * The run method to process client requests.
+   */
   @Override
   public void run() {
     try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));

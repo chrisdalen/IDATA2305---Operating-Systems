@@ -12,6 +12,11 @@ public class ClientTester {
   private static final int PORT = 12345;
   private static final String HOST = "localhost";
 
+  /**
+   * Main method to run the client tester.
+   *
+   * @param args Command line arguments
+   */
   public static void main(String[] args) {
     int numClients = 10; // Number of clients to create
     Thread[] clients = new Thread[numClients];

@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 /**
  * A simple Client class that sends a request to the server and reads the response.
- *
- * <p>Created by ChatGPT</p>
  */
 public class Client {
   private static final String SERVER_ADDRESS = "localhost";

@@ -5,10 +5,18 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * A simple single-threaded server that handles one client connection at a time.
+ */
 public class SingleThreadedServer {
   private static final int PORT = 12345;
   private static final int TOTAL_REQUESTS = 10; // To measure time taken for processing requests
 
+  /**
+   * Main method to run the server.
+   *
+   * @param args Command line arguments
+   */
   public static void main(String[] args) {
     int requestCount = 0;
     long startTime = 0; // Initialize but will be set when the first request is received
