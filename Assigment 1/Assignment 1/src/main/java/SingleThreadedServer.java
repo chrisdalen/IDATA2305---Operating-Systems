@@ -7,15 +7,18 @@ import java.net.Socket;
 
 public class SingleThreadedServer {
   private static final int PORT = 12345;
+  private static final int TOTAL_REQUESTS = 10; // To measure time taken for processing requests
 
   public static void main(String[] args) {
+    int requestCount = 0;
+    long startTime = System.currentTimeMillis();
+
     try (ServerSocket serverSocket = new ServerSocket(PORT)) {
       System.out.println("Server started on port " + PORT);
 
-      while (true) {
+      while (requestCount < TOTAL_REQUESTS) {
         try (Socket clientSocket = serverSocket.accept();
-             BufferedReader in = new BufferedReader(
-               new InputStreamReader(clientSocket.getInputStream()));
+             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
           System.out.println("Client connected");
 
@@ -48,11 +51,14 @@ public class SingleThreadedServer {
           // Send response to client
           out.println("Result: " + result);
           System.out.println("Response sent to client");
-
+          requestCount++;
         } catch (IOException | NumberFormatException e) {
           e.printStackTrace();
         }
       }
+
+      long endTime = System.currentTimeMillis();
+      System.out.println("Time taken to process " + TOTAL_REQUESTS + " requests: " + (endTime - startTime) + " ms");
     } catch (IOException e) {
       e.printStackTrace();
     }
