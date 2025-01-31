@@ -11,7 +11,7 @@ public class SingleThreadedServer {
 
   public static void main(String[] args) {
     int requestCount = 0;
-    long startTime = System.currentTimeMillis();
+    long startTime = 0; // Initialize but will be set when the first request is received
 
     try (ServerSocket serverSocket = new ServerSocket(PORT)) {
       System.out.println("Server started on port " + PORT);
@@ -21,6 +21,11 @@ public class SingleThreadedServer {
              BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
              PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
           System.out.println("Client connected");
+
+          // Record start time when the first client connects
+          if (requestCount == 0) {
+            startTime = System.currentTimeMillis();
+          }
 
           // Read request from client
           String input = in.readLine();

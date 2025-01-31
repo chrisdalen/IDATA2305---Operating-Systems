@@ -10,7 +10,6 @@ public class MultiThreadedServer {
   private static AtomicInteger requestCount = new AtomicInteger(0); // Thread-safe counter
 
   public static void main(String[] args) {
-    startTime = System.currentTimeMillis();
 
     try (ServerSocket serverSocket = new ServerSocket(PORT)) {
       System.out.println("Server started on port " + PORT);
@@ -18,6 +17,11 @@ public class MultiThreadedServer {
       while (getRequestCount() < getTotalRequests()) {
         Socket clientSocket = serverSocket.accept();
         System.out.println("Client connected");
+
+        // Record start time when the first client connects
+        if (getRequestCount() == 0) {
+          startTime = System.currentTimeMillis();
+        }
 
         // Pass requestCount and TOTAL_REQUESTS to the ClientHandler
         new Thread(new ClientHandler(clientSocket, requestCount)).start();
