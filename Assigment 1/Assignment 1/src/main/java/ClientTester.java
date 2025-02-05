@@ -11,6 +11,7 @@ import java.net.Socket;
 public class ClientTester {
   private static final int PORT = 12345;
   private static final String HOST = "localhost";
+  private static final int TOTAL_CLIENTS = 1;
 
   /**
    * Main method to run the client tester.
@@ -18,18 +19,19 @@ public class ClientTester {
    * @param args Command line arguments
    */
   public static void main(String[] args) {
-    int numClients = 10; // Number of clients to create
-    Thread[] clients = new Thread[numClients];
+    Thread[] clients = new Thread[TOTAL_CLIENTS];
 
-    for (int i = 0; i < numClients; i++) {
+    for (int i = 0; i < TOTAL_CLIENTS; i++) {
       final int clientNumber = i + 1;
       clients[i] = new Thread(() -> {
         try (Socket socket = new Socket(HOST, PORT);
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
 
-          // Example request: "50 20 A" (50 + 20)
-          String request = (clientNumber * 5) + " " + (clientNumber * 2) + " A";
+          // Sends random request to server
+          String request = (clientNumber * 5 + (int)(Math.random() * 10)) + " " +
+            (clientNumber * 2 + (int)(Math.random() * 5)) + " A";
+
           out.println(request);
           System.out.println("Client " + clientNumber + " sent: " + request);
 

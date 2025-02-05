@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -20,19 +22,23 @@ public class MultiThreadedServer {
   public static void main(String[] args) {
     try (ServerSocket serverSocket = new ServerSocket(PORT)) {
       System.out.println("Server started on port " + PORT);
+      ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
-      while (getRequestCount() < getTotalRequests()) {
+      while (true) { // Keep accepting clients
         Socket clientSocket = serverSocket.accept();
         System.out.println("Client connected");
 
-        // Record start time when the first client connects
         if (getRequestCount() == 0) {
           startTime = System.currentTimeMillis();
         }
 
-        // Pass requestCount and TOTAL_REQUESTS to the ClientHandler
-        new Thread(new ClientHandler(clientSocket, requestCount)).start();
+        threadPool.execute(new ClientHandler(clientSocket, requestCount));
+
+        if (getRequestCount() >= getTotalRequests()) { // Manually check termination
+          break;
+        }
       }
+      threadPool.shutdown();
 
       // The server can exit after handling the total requests
     } catch (IOException e) {
