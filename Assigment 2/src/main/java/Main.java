@@ -1,3 +1,6 @@
+import booking.MovieTicketClient;
+import booking.MovieTicketServer;
+
 /**
  * Main class to run the program.
  */
