@@ -30,11 +30,14 @@ public class MovieTicketServer {
     }
 
     if (ticketsToBook > availableTickets) {
+      System.out.println("Not enough tickets left! " + customerName + " requested "
+        + ticketsToBook + " tickets, but there are only " + availableTickets + " tickets left.");
       return false;
     }
 
     availableTickets -= ticketsToBook;
-    System.out.println("Booked " + ticketsToBook + " tickets for " + customerName + " to see " + movieName + ".");
+    System.out.println("Booked " + ticketsToBook + " tickets for " + customerName + " to see "
+      + movieName + ". There are " + availableTickets + " tickets left.");
     return true;
   }
 
