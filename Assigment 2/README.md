@@ -23,10 +23,9 @@ with the `syncronized` keyword used.
 Below you can read about our experiments with the keywords and what we observed.
 
 ### Synchronized
-While the number of tickets left is correctly updated, the order in which the tickets are booked is not predictable,
-and because the customers are booking more tickets in total than there are available tickets,
-it's guaranteed that there will be 1 customer each time not able to book,
-depending wholly on the order in which the threads are executed.
+While the value of `availableTickets` updates correctly, the order of bookings is unpredictable. 
+Since customers are in total trying to book **12** tickets when only **10** are available,
+one customer will always miss out. Who that is depends entirely on the order in which the threads execute.
 
 However, we consider this to be correct, as the number of tickets booked will never exceed the number of tickets available,
 and the number of tickets left will only wary between 0, 1, and 2, with one customer always being left out.
@@ -35,8 +34,9 @@ Below is an example result of running the program with the `synchronized` keywor
 
 ![img_2.png](img_2.png)
 
-If we increase the number of available tickets to 12, all customers will be able to book tickets, and we
-can see that the value of `availableTickets` will be 0 at the end of the program, and decrease as expected:
+If we increase the number of available tickets to **12**, all customers will be able to book tickets, and we
+can see that the value of `availableTickets` will always be 0 at the end of the program,
+and decrease as expected during the running of the program:
 
 ![img_3.png](img_3.png)
 

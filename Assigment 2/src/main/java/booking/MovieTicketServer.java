@@ -22,7 +22,8 @@ public class MovieTicketServer {
    * @param customerName The name of the customer.
    * @param ticketsToBook The number of tickets to book. Must be greater than 0.
    *
-   * @return true if the booking was successful, false otherwise.
+   * @return true if the booking was successful, false otherwise. Not used in this exercise,
+   * but could be useful in a real-world scenario.
    */
   public synchronized boolean bookTicket(String customerName, int ticketsToBook) {
     if (ticketsToBook <= 0) {
@@ -40,5 +41,4 @@ public class MovieTicketServer {
       + movieName + ". There are " + availableTickets + " tickets left.");
     return true;
   }
-
 }
