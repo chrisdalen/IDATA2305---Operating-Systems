@@ -6,6 +6,11 @@ public class Process {
   private int arrivalTime;
   private int burstTime;
   private int priority;
+  private int remainingTime;
+  private int completionTime;
+  private int turnaroundTime;
+  private int waitingTime;
+
 
   /**
    * Creates a new process.
@@ -20,6 +25,7 @@ public class Process {
     this.arrivalTime = arrivalTime;
     this.burstTime = burstTime;
     this.priority = priority;
+    this.remainingTime = burstTime; // Remaining time is initially equal to burst time
   }
 
   /**
@@ -59,6 +65,15 @@ public class Process {
   }
 
   /**
+   * Gets the remaining time of the process.
+   *
+   * @return The remaining time of the process.
+   */
+  public int getRemainingTime() {
+    return remainingTime;
+  }
+
+  /**
    * Sets the process ID.
    *
    * @param processId The process ID.
@@ -93,4 +108,52 @@ public class Process {
   public void setPriority(int priority) {
     this.priority = priority;
   }
+
+  /**
+   * Sets the remaining time of the process.
+   *
+   * @param remainingTime The remaining time of the process.
+   */
+  public void setRemainingTime(int remainingTime) {
+    this.remainingTime = remainingTime;
+  }
+
+  /**
+   * Calculates the completion time, turnaround time, and waiting time of the process.
+   *
+   * @param currentTime The current time.
+   */
+  public void calculateCompletionTimes(int currentTime) {
+    this.completionTime = currentTime;
+    this.turnaroundTime = this.completionTime - this.arrivalTime;
+    this.waitingTime = this.turnaroundTime - this.burstTime;
+  }
+
+  /**
+   * Gets the completion time of the process.
+   *
+   * @return The completion time of the process.
+   */
+  public int getCompletionTime() {
+    return completionTime;
+  }
+
+  /**
+   * Gets the turnaround time of the process.
+   *
+   * @return The turnaround time of the process.
+   */
+  public int getTurnaroundTime() {
+    return turnaroundTime;
+  }
+
+  /**
+   * Gets the waiting time of the process.
+   *
+   * @return The waiting time of the process.
+   */
+  public int getWaitingTime() {
+    return waitingTime;
+  }
+
 }
