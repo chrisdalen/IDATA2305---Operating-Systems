@@ -40,7 +40,8 @@ public class PreemptivePriority {
         // Select the process with the highest priority (lowest priority number)
         Process selectedProcess = readyQueue.get(0);
 
-        if (currentProcess == null || selectedProcess.getPriority() < currentProcess.getPriority()) {
+        if (currentProcess == null ||
+          selectedProcess.getPriority() < currentProcess.getPriority()) {
           currentProcess = selectedProcess;
         }
 
@@ -65,22 +66,33 @@ public class PreemptivePriority {
 
   /**
    * Prints the results of the scheduling algorithm.
+   * Modified by ChatGPT for better formatting.
    *
    * @param processes the list of processes.
    */
   private static void printResults(List<Process> processes) {
     double totalWaitingTime = 0;
     double totalTurnaroundTime = 0;
-    System.out.println("PID\tAT\tBT\tPR\tCT\tTAT\tWT");
+    System.out.printf("%-12s%-15s%-12s%-12s%-18s%-18s%-14s\n",
+      "Process ID", "Arrival Time", "Burst Time", "Priority",
+      "Completion Time", "Turnaround Time", "Waiting Time");
 
+// Print the values with formatting to align the columns
     for (Process p : processes) {
-      System.out.println(p.getProcessId() + "\t" + p.getArrivalTime() + "\t"
-        + p.getBurstTime() + "\t" + p.getPriority() + "\t"
-        + p.getCompletionTime() + "\t" + p.getTurnaroundTime() + "\t" + p.getWaitingTime());
+      System.out.printf("%-12d%-15d%-12d%-12d%-18d%-18d%-14d\n",
+        p.getProcessId(),
+        p.getArrivalTime(),
+        p.getBurstTime(),
+        p.getPriority(),
+        p.getCompletionTime(),
+        p.getTurnaroundTime(),
+        p.getWaitingTime());
       totalWaitingTime += p.getWaitingTime();
       totalTurnaroundTime += p.getTurnaroundTime();
     }
-    System.out.println("Average Waiting Time: " + (totalWaitingTime / processes.size()));
-    System.out.println("Average Turnaround Time: " + (totalTurnaroundTime / processes.size()));
+    System.out.printf("\nAverage Waiting Time: %.2f\n",
+      totalWaitingTime / (float) processes.size());
+    System.out.printf("Average Turnaround Time: %.2f\n",
+      totalTurnaroundTime / (float) processes.size());
   }
 }
