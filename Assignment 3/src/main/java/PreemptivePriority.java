@@ -6,53 +6,35 @@ import java.util.List;
  * Preemptive Priority Scheduling Algorithm.
  *
  * <p>This version of the algorithm uses smaller numbers to represent higher priority.
- * E.g. Priority 1 is higher than priority 2, and priority 0 is the highest.
+ * E.g., Priority 1 is higher than priority 2, and priority 0 is the highest.
  */
 public class PreemptivePriority {
 
   /**
    * Executes the preemptive priority scheduling algorithm.
    *
-   * @param processes an array of processes to be scheduled.
+   * @param processes a list of processes to be scheduled.
    */
   public static void execute(List<Process> processes) {
     int time = 0;
-    int completed = 0;
+    int numberOfCompleted = 0;
+    int numberOfProcesses = processes.size();
     Process currentProcess = null;
-    int n = processes.size();
-
-    // Initialize the ready queue
     List<Process> readyQueue = new ArrayList<>();
 
-    // Sort by arrival time initially
+    // Sort processes by arrival time initially
     processes.sort(Comparator.comparingInt(Process::getArrivalTime));
 
-    while (completed < n) {
-      // Add all processes that have arrived at the current time to the ready queue
-      for (Process p : processes) {
-        if (p.getArrivalTime() == time) {
-          readyQueue.add(p);
-          readyQueue.sort(Comparator.comparingInt(Process::getPriority)); // Sort by priority
-        }
-      }
+    while (numberOfCompleted < numberOfProcesses) {
+      updateReadyQueue(processes, readyQueue, time);
+      currentProcess = selectProcess(readyQueue, currentProcess);
 
-      if (!readyQueue.isEmpty()) {
-        // Select the process with the highest priority (lowest priority number)
-        Process selectedProcess = readyQueue.get(0);
-
-        if (currentProcess == null ||
-          selectedProcess.getPriority() < currentProcess.getPriority()) {
-          currentProcess = selectedProcess;
-        }
-
-        // Execute the selected process for 1 unit of time
-        currentProcess.setRemainingTime(currentProcess.getRemainingTime() - 1);
+      if (currentProcess != null) {
+        executeProcess(currentProcess);
 
         if (currentProcess.getRemainingTime() == 0) {
-          // Process completed
-          currentProcess.calculateCompletionTimes(time + 1);
-          completed++;
-
+          completeProcess(currentProcess, time);
+          numberOfCompleted++;
           readyQueue.remove(currentProcess);
           currentProcess = null;
         }
@@ -60,13 +42,65 @@ public class PreemptivePriority {
       time++;
     }
 
-    // Print results
     printResults(processes);
   }
 
   /**
+   * Adds newly arrived processes to the ready queue and sorts by priority.
+   *
+   * @param processes a list of all processes.
+   * @param readyQueue the list of processes in the ready queue.
+   * @param time the current time.
+   */
+  private static void updateReadyQueue(List<Process> processes, List<Process> readyQueue, int time) {
+    for (Process p : processes) {
+      if (p.getArrivalTime() == time && !readyQueue.contains(p)) {
+        readyQueue.add(p);
+      }
+    }
+    readyQueue.sort(Comparator.comparingInt(Process::getPriority));
+  }
+
+  /**
+   * Selects the highest priority process for execution.
+   *
+   * @param readyQueue the list of processes in the ready queue.
+   * @param currentProcess the process currently being executed.
+   *
+   * @return the process with the highest priority.
+   */
+  private static Process selectProcess(List<Process> readyQueue, Process currentProcess) {
+    if (readyQueue.isEmpty()) {
+      return null;
+    }
+    Process selectedProcess = readyQueue.get(0);
+    return (currentProcess == null || selectedProcess.getPriority() < currentProcess.getPriority())
+      ? selectedProcess
+      : currentProcess;
+  }
+
+  /**
+   * Executes the given process for one unit of time.
+   *
+   * @param process the process to execute.
+   */
+  private static void executeProcess(Process process) {
+    process.setRemainingTime(process.getRemainingTime() - 1);
+  }
+
+  /**
+   * Marks a process as completed and calculates its completion times.
+   *
+   * @param process the process to complete.
+   * @param time the current time.
+   */
+  private static void completeProcess(Process process, int time) {
+    process.calculateCompletionTimes(time + 1);
+  }
+
+  /**
    * Prints the results of the scheduling algorithm.
-   * Modified by ChatGPT for better formatting.
+   * This method has been modified by ChatGPT for better formatting.
    *
    * @param processes the list of processes.
    */
@@ -77,7 +111,6 @@ public class PreemptivePriority {
       "Process ID", "Arrival Time", "Burst Time", "Priority",
       "Completion Time", "Turnaround Time", "Waiting Time");
 
-// Print the values with formatting to align the columns
     for (Process p : processes) {
       System.out.printf("%-12d%-15d%-12d%-12d%-18d%-18d%-14d\n",
         p.getProcessId(),
@@ -90,9 +123,8 @@ public class PreemptivePriority {
       totalWaitingTime += p.getWaitingTime();
       totalTurnaroundTime += p.getTurnaroundTime();
     }
-    System.out.printf("\nAverage Waiting Time: %.2f\n",
-      totalWaitingTime / (float) processes.size());
-    System.out.printf("Average Turnaround Time: %.2f\n",
-      totalTurnaroundTime / (float) processes.size());
+
+    System.out.printf("\nAverage Waiting Time: %.2f\n", totalWaitingTime / processes.size());
+    System.out.printf("Average Turnaround Time: %.2f\n", totalTurnaroundTime / processes.size());
   }
 }

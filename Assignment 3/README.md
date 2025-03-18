@@ -9,6 +9,7 @@ Chris was in charge of the preemptive priority scheduling algorithm,
 while Mona was in charge of the FCFS algorithm.
 Chris also created the `Process` class and the `CpuScheduler` class,
 but we each created our own methods within that class for our respective algorithms.
+Mona also created a simple menu system to choose which algorithm to run.
 
 
 ## How to Run
@@ -43,3 +44,27 @@ FCFS works by **executing processes in the order they arrive**.
 If you run FCFS Scheduling, you will see the following output:  
 
 ![image2.png](image2.png)
+
+## Comparison
+We'll now create 4 processes, and run them with both algorithms to compare the results.
+These are the processes (for FCFS, priority is ignored):
+![img_1.png](img_1.png)
+
+These are the outputs:
+
+![img_2.png](img_2.png)
+
+![img_3.png](img_3.png)
+
+The results show that the scheduling algorithm will affect the performance of the program
+(notice the difference in waiting times and turnaround time).
+
+While the difference isn't huge in this case, as the number of processes increases,
+we can expect the average waiting time for the First-Come-First-Served (FCFS) algorithm to be higher
+than for the preemptive priority scheduling algorithm. This is because FCFS suffers from the what's called the convoy effect,
+where shorter processes get stuck waiting behind longer ones, increasing the average waiting time. 
+
+The preemptive priority scheduling algorithm is less likely to let a single process
+hold the CPU for its entire duration, as it allows higher-priority processes to interrupt (preempt) lower-priority ones.
+This helps reduce long wait times and improves overall efficiency.
+
